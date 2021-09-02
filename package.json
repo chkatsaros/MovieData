@@ -1,0 +1,29 @@
+{
+  "name": "moviedata",
+  "version": "1.0.0",
+  "description": "An application that uses the API from The Movie DB and stores movie information.",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sp444rk/MovieData.git"
+  },
+  "author": "Christos Katsaros",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sp444rk/MovieData/issues"
+  },
+  "homepage": "https://github.com/sp444rk/MovieData#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "node-schedule": "^2.0.0",
+    "nodemon": "^2.0.12",
+    "pg": "^8.7.1"
+  }
+}
