@@ -36,7 +36,7 @@ app.get('/', async (req, res) => {
 
             const credits = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${API_KEY}`);
             const crew = credits.data.crew;
-            //console.log(crew);
+            
             for (member of crew) {
                 if (member.job === "Director") {
 
@@ -64,7 +64,6 @@ app.get('/', async (req, res) => {
                         }
                         client.end;
                     });
-                    //console.log(`https://www.imdb.com/name/${directorIMDB}/`);
                 }
             }
         }
@@ -86,15 +85,5 @@ const client = new Client({
 });
 client.connect();
 
-
 //Listen to the Server
 app.listen(3000, '0.0.0.0');
-
-// API CALL
-// Playing now in Greece: https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&region=${regionToQuery}
-// Get movie by id: https://api.themoviedb.org/3/movie/${movieID}?api_key=${API_KEY}
-// IMDB Link: https://www.imdb.com/title/${imdbId}
-// Director from crew[i].job == "Director": https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}
-// Get person particularly imdb_id: https://api.themoviedb.org/3/person/${crew[i].id}?api_key=${API_KEY}
-// His imdb profile is: https://www.imdb.com/name/${directorID}/
-
