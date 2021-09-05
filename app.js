@@ -10,25 +10,6 @@ const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const regionToQuery = 'GR';
 
-const client = new Client({
-    host: "localhost",
-    user: DB_USER,
-    port: 5432,
-    password: DB_PASSWORD,
-    database: "postgres"
-});
-client.connect();
-
-client.query(`Select * from film`, (err, res) => {
-    if (!err) {
-        console.log(res.rows);
-    }
-    else {
-        console.log(err.message);
-    }
-    client.end;
-});
-
 //Middleware
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -41,14 +22,58 @@ app.get('/', async (req, res) => {
         const movieData = nowPlaying.data.results;
 
         for (movie of movieData) {
+
+            let movieQuery = {
+                text: `INSERT INTO movies(movie_id, title, original_title, description)values($1, $2, $3, $4)`,
+                values: [movie.id, movie.title, movie.original_title, movie.overview]
+            };
+            client.query(movieQuery, (err, res) => {
+                if (!err) {
+                    console.log(res.rows);
+                }
+                else {
+                    console.log(err.message);
+                }
+                client.end;
+            });
+
             const credits = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${API_KEY}`);
             const crew = credits.data.crew;
             //console.log(crew);
             for (member of crew) {
                 if (member.job === "Director") {
+
+                    let movieDirectorQuery = {
+                        text: `INSERT INTO movie_director(movie_id, director_id)values($1, $2)`,
+                        values: [movie.id, member.id]
+                    };
+                    client.query(movieDirectorQuery, (err, res) => {
+                        if (!err) {
+                            console.log(res.rows);
+                        }
+                        else {
+                            console.log(err.message);
+                        }
+                        client.end;
+                    });
+
                     const director = await axios.get(`https://api.themoviedb.org/3/person/${member.id}?api_key=${API_KEY}`);
                     const directorIMDB = director.data.imdb_id;
-                    console.log(`https://www.imdb.com/name/${directorIMDB}/`);
+
+                    let directorQuery = {
+                        text: `INSERT INTO directors(director_id, imdb_link)values($1, $2)`,
+                        values: [member.id, `https://www.imdb.com/name/${directorIMDB}/`]
+                    };
+                    client.query(directorQuery, (err, res) => {
+                        if (!err) {
+                            console.log(res.rows);
+                        }
+                        else {
+                            console.log(err.message);
+                        }
+                        client.end;
+                    });
+                    //console.log(`https://www.imdb.com/name/${directorIMDB}/`);
                 }
             }
         }
@@ -60,7 +85,15 @@ app.get('/', async (req, res) => {
     }
 });
 
-//Connect to database
+//Connect to the DB
+const client = new Client({
+    host: "localhost",
+    user: DB_USER,
+    port: 5432,
+    password: DB_PASSWORD,
+    database: "postgres"
+});
+client.connect();
 
 
 //Listen to the Server
