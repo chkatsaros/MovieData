@@ -24,7 +24,7 @@ app.get('/', async (req, res) => {
         for (movie of movieData) {
 
             let movieQuery = {
-                text: `INSERT INTO movies(movie_id, title, original_title, description)values($1, $2, $3, $4)`,
+                text: `INSERT INTO movie(movie_id, title, original_title, description)values($1, $2, $3, $4)`,
                 values: [movie.id, movie.title, movie.original_title, movie.overview]
             };
             client.query(movieQuery, (err, res) => {
@@ -55,7 +55,7 @@ app.get('/', async (req, res) => {
                     const directorIMDB = director.data.imdb_id;
 
                     let directorQuery = {
-                        text: `INSERT INTO directors(director_id, imdb_link)values($1, $2)`,
+                        text: `INSERT INTO director(director_id, imdb_link)values($1, $2)`,
                         values: [member.id, `https://www.imdb.com/name/${directorIMDB}/`]
                     };
                     client.query(directorQuery, (err, res) => {
