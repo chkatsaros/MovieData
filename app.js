@@ -5,9 +5,14 @@ const { Client } = require('pg');
 require('dotenv/config');
 
 const app = express();
+
 const API_KEY = process.env.API_KEY;
+const DB = process.env.DB;
 const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
+const PORT = process.env.PORT;
+const HOST = process.env.HOST;
+
 const regionToQuery = 'GR';
 
 //Middleware
@@ -68,6 +73,7 @@ app.get('/', async (req, res) => {
             }
         }
 
+        //Return nowPlaying movies in Greek Theaters
         res.send(movieData);
     }
     catch (err) {
@@ -77,11 +83,11 @@ app.get('/', async (req, res) => {
 
 //Connect to the DB
 const client = new Client({
-    host: "localhost",
+    host: HOST,
     user: DB_USER,
-    port: 5432,
+    port: PORT,
     password: DB_PASSWORD,
-    database: "postgres"
+    database: DB
 });
 client.connect();
 
