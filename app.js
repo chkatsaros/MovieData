@@ -28,10 +28,7 @@ app.get('/', async (req, res) => {
                 values: [movie.id, movie.title, movie.original_title, movie.overview]
             };
             client.query(movieQuery, (err, res) => {
-                if (!err) {
-                    console.log(res.rows);
-                }
-                else {
+                if (err) {
                     console.log(err.message);
                 }
                 client.end;
@@ -48,10 +45,7 @@ app.get('/', async (req, res) => {
                         values: [movie.id, member.id]
                     };
                     client.query(movieDirectorQuery, (err, res) => {
-                        if (!err) {
-                            console.log(res.rows);
-                        }
-                        else {
+                        if (err) {
                             console.log(err.message);
                         }
                         client.end;
@@ -65,10 +59,7 @@ app.get('/', async (req, res) => {
                         values: [member.id, `https://www.imdb.com/name/${directorIMDB}/`]
                     };
                     client.query(directorQuery, (err, res) => {
-                        if (!err) {
-                            console.log(res.rows);
-                        }
-                        else {
+                        if (err) {
                             console.log(err.message);
                         }
                         client.end;
